@@ -20,7 +20,6 @@ import ru.mos.mesh.cookie_util.dto.CookieRequestDto;
 @RequestMapping(path = "/cookie_util")
 public class СookieController {
 
-  @CrossOrigin
   @PostMapping(
       path = "/{startId}",
       consumes = MediaType.APPLICATION_JSON_VALUE
@@ -32,6 +31,8 @@ public class СookieController {
     Map<String, Object> jwtData = cookieRequestDto.getMap();
     Key key = new SecretKeySpec(cookieRequestDto.getSecret().getBytes(), SignatureAlgorithm.HS512.getJcaName());
     String token = Jwts.builder().setClaims(jwtData).signWith(key).compact();
-    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, String.format("__Secure-%s=%s; Max-Age=60; Path=/; Domain=mesh-test.hostco.ru; Secure; HttpOnly; SameSite=None", startId, token)).build();
+    return ResponseEntity.ok()
+        .header(HttpHeaders.SET_COOKIE, String.format("__Secure-%s=%s; Max-Age=60; Path=/; Domain=hostco.ru; Secure; HttpOnly; SameSite=None", startId, token))
+        .build();
   }
 }
